@@ -4,14 +4,14 @@ const db = require("../db");
 
 // CREATE
 router.post("/", (req, res) => {
-  const { paciente_id, medico_id, fecha_cita, motivo } = req.body;
+  const { paciente_id, medico_id, fecha_cita, motivo, estado } = req.body;
 
   const sql = `
-        INSERT INTO citas (paciente_id, medico_id, fecha_cita, motivo)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO citas (paciente_id, medico_id, fecha_cita, motivo, estado)
+        VALUES (?, ?, ?, ?, ?)
     `;
 
-  db.query(sql, [paciente_id, medico_id, fecha_cita, motivo], (err) => {
+  db.query(sql, [paciente_id, medico_id, fecha_cita, motivo, estado], (err) => {
     if (err) return res.status(500).send(err);
     res.send("Cita creada");
   });
@@ -51,6 +51,14 @@ router.put("/:id", (req, res) => {
       res.send("Cita actualizada");
     },
   );
+});
+
+// DELETE
+router.delete("/:id", (req, res) => {
+  db.query("DELETE FROM citas WHERE id=?", [req.params.id], (err) => {
+    if (err) return res.status(500).send(err);
+    res.send("Cita eliminada");
+  });
 });
 
 module.exports = router;
