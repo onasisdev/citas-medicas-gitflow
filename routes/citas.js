@@ -17,4 +17,20 @@ router.post("/", (req, res) => {
   });
 });
 
+// READ
+router.get("/", (req, res) => {
+  const sql = `
+        SELECT c.id, p.nombre AS paciente, m.nombre AS medico,
+               c.fecha_cita, c.motivo, c.estado
+        FROM citas c
+        JOIN pacientes p ON c.paciente_id = p.id
+        JOIN medicos m ON c.medico_id = m.id
+    `;
+
+  db.query(sql, (err, result) => {
+    if (err) return res.status(500).send(err);
+    res.json(result);
+  });
+});
+
 module.exports = router;
