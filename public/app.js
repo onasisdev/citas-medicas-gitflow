@@ -1,6 +1,7 @@
 const API = "http://localhost:3000/api/citas";
 
 const form = document.getElementById("formCita");
+const lista = document.getElementById("listaCitas");
 
 let editando = false;
 
@@ -37,8 +38,6 @@ form.addEventListener("submit", async (e) => {
   cargarCitas();
 });
 
-const lista = document.getElementById("listaCitas");
-
 async function cargarCitas() {
   const res = await fetch(API);
   const data = await res.json();
@@ -47,6 +46,7 @@ async function cargarCitas() {
 
   data.forEach((cita) => {
     const div = document.createElement("div");
+    div.classList.add("cita");
 
     const fecha = new Date(cita.fecha_cita);
 
@@ -56,14 +56,28 @@ async function cargarCitas() {
     });
 
     div.innerHTML = `
-      <b>Paciente</b>: ${cita.paciente}<br><br>
-      <b>Médico</b>: ${cita.medico}<br><br>
-      <b>Fecha</b>: ${fechaFormateada}<br><br>
-      <b>Motivo</b>: ${cita.motivo}<br><br>
-      <b>Estado</b>: ${cita.estado}
-
-       <button class="btnEditar">Editar</button>
-       <button class="delete btnEliminar">Eliminar</button>
+    <b>Paciente</b>: ${cita.paciente}
+    <br>
+    <br>
+    
+    <b>Médico</b>: ${cita.medico}
+    <br>
+    <br>
+        
+    <b>Fecha</b>: ${fechaFormateada}
+    <br>
+    <br>
+    
+    <b>Motivo</b>: ${cita.motivo}
+    <br>
+    <br>
+    
+    <b>Estado</b>: ${cita.estado}
+    <br>
+    <br>
+    
+    <button class="btnEditar">Editar</button>
+    <button class="delete btnEliminar">Eliminar</button>
     `;
 
     div.querySelector(".btnEditar").addEventListener("click", () => {
