@@ -24,3 +24,35 @@ form.addEventListener("submit", async (e) => {
   form.reset();
   cargarCitas();
 });
+
+const lista = document.getElementById("listaCitas");
+
+async function cargarCitas() {
+  const res = await fetch(API);
+  const data = await res.json();
+
+  lista.innerHTML = "";
+
+  data.forEach((cita) => {
+    const div = document.createElement("div");
+
+    const fecha = new Date(cita.fecha_cita);
+
+    const fechaFormateada = fecha.toLocaleString("es-DO", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
+
+    div.innerHTML = `
+      <b>Paciente</b>: ${cita.paciente}<br><br>
+      <b>Médico</b>: ${cita.medico}<br><br>
+      <b>Fecha</b>: ${fechaFormateada}<br><br>
+      <b>Motivo</b>: ${cita.motivo}<br><br>
+      <b>Estado</b>: ${cita.estado}
+    `;
+
+    lista.appendChild(div);
+  });
+}
+
+cargarCitas();
