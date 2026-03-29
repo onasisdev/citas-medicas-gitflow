@@ -33,4 +33,24 @@ router.get("/", (req, res) => {
   });
 });
 
+// UPDATE
+router.put("/:id", (req, res) => {
+  const { paciente_id, medico_id, fecha_cita, motivo, estado } = req.body;
+
+  const sql = `
+        UPDATE citas
+        SET paciente_id=?, medico_id=?, fecha_cita=?, motivo=?, estado=?
+        WHERE id=?
+    `;
+
+  db.query(
+    sql,
+    [paciente_id, medico_id, fecha_cita, motivo, estado, req.params.id],
+    (err) => {
+      if (err) return res.status(500).send(err);
+      res.send("Cita actualizada");
+    },
+  );
+});
+
 module.exports = router;
