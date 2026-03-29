@@ -63,10 +63,15 @@ async function cargarCitas() {
       <b>Estado</b>: ${cita.estado}
 
        <button class="btnEditar">Editar</button>
+       <button class="delete btnEliminar">Eliminar</button>
     `;
 
     div.querySelector(".btnEditar").addEventListener("click", () => {
       editar(cita);
+    });
+
+    div.querySelector(".btnEliminar").addEventListener("click", () => {
+      eliminar(cita.id);
     });
 
     lista.appendChild(div);
@@ -85,6 +90,11 @@ function editar(cita) {
   document.getElementById("estado").value = cita.estado;
 
   editando = true;
+}
+
+async function eliminar(id) {
+  await fetch(`${API}/${id}`, { method: "DELETE" });
+  cargarCitas();
 }
 
 cargarCitas();
