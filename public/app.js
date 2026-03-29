@@ -15,11 +15,23 @@ form.addEventListener("submit", async (e) => {
     estado: document.getElementById("estado").value,
   };
 
-  await fetch(API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(cita),
-  });
+  const id = document.getElementById("citaId").value;
+
+  if (editando) {
+    await fetch(`${API}/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(cita),
+    });
+
+    editando = false;
+  } else {
+    await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(cita),
+    });
+  }
 
   form.reset();
   cargarCitas();
@@ -49,10 +61,30 @@ async function cargarCitas() {
       <b>Fecha</b>: ${fechaFormateada}<br><br>
       <b>Motivo</b>: ${cita.motivo}<br><br>
       <b>Estado</b>: ${cita.estado}
+
+       <button class="btnEditar">Editar</button>
     `;
+
+    div.querySelector(".btnEditar").addEventListener("click", () => {
+      editar(cita);
+    });
 
     lista.appendChild(div);
   });
+}
+
+function editar(cita) {
+  document.getElementById("citaId").value = cita.id;
+  document.getElementById("paciente_id").value = cita.paciente_id || "";
+  document.getElementById("medico_id").value = cita.medico_id || "";
+
+  const fecha = cita.fecha_cita.slice(0, 16);
+  document.getElementById("fecha_cita").value = fecha;
+
+  document.getElementById("motivo").value = cita.motivo;
+  document.getElementById("estado").value = cita.estado;
+
+  editando = true;
 }
 
 cargarCitas();
