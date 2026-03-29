@@ -53,4 +53,12 @@ router.put("/:id", (req, res) => {
   );
 });
 
+// DELETE
+router.delete("/:id", (req, res) => {
+  db.query("DELETE FROM citas WHERE id=?", [req.params.id], (err) => {
+    if (err) return res.status(500).send(err);
+    res.send("Cita eliminada");
+  });
+});
+
 module.exports = router;
